@@ -15,7 +15,7 @@ Font :: struct {
 }
 
 Radio_Group :: struct {
-	selected: i8,
+	selected: u8,
 } 
 
 component_context := Component_Context{}

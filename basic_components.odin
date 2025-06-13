@@ -41,7 +41,7 @@ button :: proc(name: string, loc := #caller_location) -> bool {
 	return false
 }
 
-radio_button :: proc(group: ^Radio_Group, index: i8) -> bool {
+radio_button :: proc(group: ^Radio_Group, index: u8) -> bool {
 	if clay.UI()(radio_outer_styles()) {
 		if group.selected == index {
 			if clay.UI()(radio_inner_selected_styles()) {}
