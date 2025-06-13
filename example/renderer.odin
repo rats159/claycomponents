@@ -1,24 +1,20 @@
-package clay_components
+package example
 
-import clay "../clay-odin"
+import clay "../../clay-odin"
 import "core:math"
 import "core:strings"
 import rl "vendor:raylib"
-Raylib_Font :: struct {
-    fontId: u16,
-    font:   rl.Font,
-}
 
 clay_color_to_rl_color :: proc(color: clay.Color) -> rl.Color {
     return {u8(color.r), u8(color.g), u8(color.b), u8(color.a)}
 }
-
-raylib_fonts := [dynamic]Raylib_Font{}
+ 
+raylib_fonts := [dynamic]rl.Font{}
 
 measure_text :: proc "c" (text: clay.StringSlice, config: ^clay.TextElementConfig, userData: rawptr) -> clay.Dimensions {
     line_width: f32 = 0
 
-    font := raylib_fonts[config.fontId].font
+    font := raylib_fonts[config.fontId]
 
     for i in 0 ..< text.length {
         glyph_index := text.chars[i] - 32
@@ -32,7 +28,7 @@ measure_text :: proc "c" (text: clay.StringSlice, config: ^clay.TextElementConfi
         }
     }
 
-    return {width = line_width / 2, height = f32(config.fontSize)}
+    return {width = line_width, height = f32(config.fontSize)}
 }
 
 clay_raylib_render :: proc(render_commands: ^clay.ClayArray(clay.RenderCommand), allocator := context.temp_allocator) {
@@ -49,7 +45,7 @@ clay_raylib_render :: proc(render_commands: ^clay.ClayArray(clay.RenderCommand),
 
             cstring_text := strings.clone_to_cstring(text, allocator)
 
-            font := raylib_fonts[config.fontId].font
+            font := raylib_fonts[config.fontId]
             rl.DrawTextEx(font, cstring_text, {bounds.x, bounds.y}, f32(config.fontSize), f32(config.letterSpacing), clay_color_to_rl_color(config.textColor))
         case .Image:
             config := render_command.renderData.image
