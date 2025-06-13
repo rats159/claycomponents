@@ -25,8 +25,8 @@ main :: proc() {
 	append(&raylib_fonts, rl.LoadFontEx("./resources/NotoSans-Regular.ttf", 24, nil, 0))
 	append(&raylib_fonts, rl.LoadFontEx("./resources/NotoSans-Bold.ttf", 48, nil, 0))
 
-	cc.set_font(&cc.default_text_styles, {fontId = 0, fontSize = 24, textColor = cc.BLACK})
-	cc.set_font(&cc.default_header_styles, {fontId = 1, fontSize = 48, textColor = cc.BLACK})
+	cc.set_font(&cc.default_text_styles, {fontId = 0, fontSize = 24, textColor = {0, 0, 0, 255}})
+	cc.set_font(&cc.default_header_styles, {fontId = 1, fontSize = 48, textColor = {0, 0, 0, 255}})
 
 	for !rl.WindowShouldClose() {
 		commands := layout()
@@ -54,6 +54,7 @@ layout :: proc() -> clay.ClayArray(clay.RenderCommand) {
 			layoutDirection = .TopToBottom,
 			childGap = 4,
 		},
+		backgroundColor = cc.current_theme.base_color,
 	},
 	) {
 		if cc.section("Sliders!") {
@@ -75,13 +76,11 @@ layout :: proc() -> clay.ClayArray(clay.RenderCommand) {
 
 		if cc.section("Radio Buttons") {
 			if clay.UI()({layout = {layoutDirection = .TopToBottom, childGap = 4}}) {
-				cc.radio_button(&radio_group, 0)
-				cc.radio_button(&radio_group, 1)
-				cc.radio_button(&radio_group, 2)
-				cc.radio_button(&radio_group, 3)
+				theme_button(&radio_group, 0, "Light Theme")
+				theme_button(&radio_group, 1, "Dark Theme")
+				theme_button(&radio_group, 2, "Red Theme")
+				theme_button(&radio_group, 3, "Pinkypurpley Theme")
 			}
-
-			cc.label_dynamic(fmt.tprintf("Current: %d", radio_group.selected))
 		}
 
 		if cc.section("Toggles!") {
@@ -95,6 +94,69 @@ layout :: proc() -> clay.ClayArray(clay.RenderCommand) {
 
 
 	return clay.EndLayout()
+}
+
+set_theme :: proc(index: u8) {
+	switch index {
+	case 0:
+		cc.current_theme = cc.default_theme
+		cc.set_font(
+			&cc.default_text_styles,
+			{fontId = 0, fontSize = 24, textColor = {0, 0, 0, 255}},
+		)
+		cc.set_font(
+			&cc.default_header_styles,
+			{fontId = 1, fontSize = 48, textColor = {0, 0, 0, 255}},
+		)
+	case 1:
+		cc.current_theme.active_color = {191, 191, 191, 255}
+		cc.current_theme.base_color = {31, 31, 31, 255}
+		cc.current_theme.border_color = {127, 127, 127, 255}
+		cc.current_theme.hover_color = {63, 63, 63, 255}
+		cc.set_font(
+			&cc.default_text_styles,
+			{fontId = 0, fontSize = 24, textColor = {255, 255, 255, 255}},
+		)
+		cc.set_font(
+			&cc.default_header_styles,
+			{fontId = 1, fontSize = 48, textColor = {255, 255, 255, 255}},
+		)
+	case 2:
+		cc.current_theme.active_color = {239, 189, 189, 255}
+		cc.current_theme.base_color = {160, 62, 62, 255}
+		cc.current_theme.border_color = {73, 36, 36, 255}
+		cc.current_theme.hover_color = {158, 61, 61, 255}
+		cc.set_font(
+			&cc.default_text_styles,
+			{fontId = 0, fontSize = 24, textColor = {249, 164, 164, 255}},
+		)
+		cc.set_font(
+			&cc.default_header_styles,
+			{fontId = 1, fontSize = 48, textColor = {249, 164, 164, 255}},
+		)
+	case 3:
+		cc.current_theme.active_color = {226, 189, 239, 255}
+		cc.current_theme.base_color = {112, 10, 81, 255}
+		cc.current_theme.border_color = {40, 1, 29, 255}
+		cc.current_theme.hover_color = {167, 53, 173, 255}
+		cc.set_font(
+			&cc.default_text_styles,
+			{fontId = 0, fontSize = 24, textColor = {246, 179, 249, 255}},
+		)
+		cc.set_font(
+			&cc.default_header_styles,
+			{fontId = 1, fontSize = 48, textColor = {246, 179, 249, 255}},
+		)
+	}
+}
+
+theme_button :: proc(group: ^cc.Radio_Group, index: u8, label: string) {
+	if clay.UI()({}) {
+		if cc.radio_button(group, index) {
+			set_theme(index)
+		}
+		cc.label_dynamic(label)
+	}
 }
 
 render :: proc(commands: ^clay.ClayArray(clay.RenderCommand)) {

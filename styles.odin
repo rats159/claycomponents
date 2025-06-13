@@ -2,28 +2,39 @@ package clay_components
 
 import clay "../clay-odin"
 
-BLACK :: clay.Color{0, 0, 0, 255}
-WHITE :: clay.Color{255, 255, 255, 255}
-LIGHTGRAY :: clay.Color{191, 191, 191, 255}
-GRAY :: clay.Color{127, 127, 127, 255}
-RED :: clay.Color{255, 0, 0, 255}
+Style_Set :: struct {
+	border_color: clay.Color,
+	hover_color:  clay.Color,
+	active_color: clay.Color,
+	base_color:   clay.Color,
+}
+
+default_theme :: Style_Set {
+	border_color = {0, 0, 0, 255},
+	hover_color  = {191, 191, 191, 255},
+	active_color = {127, 127, 127, 255},
+	base_color   = {255, 255, 255, 255},
+}
+
+current_theme := default_theme
+
 
 button_background_color :: proc() -> clay.Color {
 	if clay.Hovered() {
 		if component_context.mouse_down {
-			return GRAY
+			return current_theme.active_color
 		}
 
-		return LIGHTGRAY
+		return current_theme.hover_color
 	}
 
-	return WHITE
+	return current_theme.base_color
 }
 
 button_styles :: proc() -> clay.ElementDeclaration {
 	return clay.ElementDeclaration {
 		backgroundColor = button_background_color(),
-		border = {width = {2, 2, 2, 2, 0}, color = BLACK},
+		border = {width = {2, 2, 2, 2, 0}, color = current_theme.border_color},
 		layout = {padding = clay.PaddingAll(4)},
 	}
 }
@@ -48,7 +59,7 @@ radio_outer_styles :: proc() -> clay.ElementDeclaration {
 		cornerRadius = clay.CornerRadiusAll(RADIO_SIZE / 2),
 		border = {
 			width = {RADIO_SIZE / 8, RADIO_SIZE / 8, RADIO_SIZE / 8, RADIO_SIZE / 8, 0},
-			color = BLACK,
+			color = current_theme.border_color,
 		},
 		backgroundColor = button_background_color(),
 	}
@@ -58,7 +69,7 @@ radio_inner_selected_styles :: proc() -> clay.ElementDeclaration {
 	return {
 		layout = {sizing = {clay.SizingFixed(RADIO_SIZE / 2), clay.SizingFixed(RADIO_SIZE / 2)}},
 		cornerRadius = clay.CornerRadiusAll(RADIO_SIZE / 4),
-		backgroundColor = BLACK,
+		backgroundColor = current_theme.border_color,
 	}
 }
 
@@ -82,9 +93,9 @@ togglebox_styles :: proc() -> clay.ElementDeclaration {
 				TOGGLEBOX_SIZE / 8,
 				0,
 			},
-			color = BLACK,
+			color = current_theme.border_color,
 		},
-		backgroundColor = button_background_color()
+		backgroundColor = button_background_color(),
 	}
 }
 
@@ -93,7 +104,7 @@ togglebox_inner_active_styles :: proc() -> clay.ElementDeclaration {
 		layout = {
 			sizing = {clay.SizingFixed(TOGGLEBOX_SIZE / 2), clay.SizingFixed(TOGGLEBOX_SIZE / 2)},
 		},
-		backgroundColor = BLACK,
+		backgroundColor = current_theme.border_color,
 	}
 }
 
@@ -105,7 +116,7 @@ slider_bar_styles :: proc(id: clay.ElementId) -> clay.ElementDeclaration {
 	return {
 		id = id,
 		layout = {sizing = {width = clay.SizingGrow({}), height = clay.SizingFixed(4)}},
-		backgroundColor = BLACK,
+		backgroundColor = current_theme.border_color,
 	}
 }
 
@@ -113,7 +124,7 @@ slider_ball_styles :: proc() -> clay.ElementDeclaration {
 	return {
 		layout = {sizing = {width = clay.SizingFixed(32), height = clay.SizingFixed(32)}},
 		backgroundColor = button_background_color(),
-		border = {width = {4, 4, 4, 4, 0}, color = BLACK},
+		border = {width = {4, 4, 4, 4, 0}, color = current_theme.border_color},
 		floating = {
 			attachTo = .Parent,
 			attachment = {element = .CenterCenter, parent = .RightCenter},
@@ -138,7 +149,7 @@ floating_horizontal_fill_styles :: proc() -> clay.ElementDeclaration {
 
 section_styles :: proc() -> clay.ElementDeclaration {
 	return {
-		border = {color = BLACK, width = {4, 4, 4, 4, 0}},
+		border = {color = current_theme.border_color, width = {4, 4, 4, 4, 0}},
 		layout = {padding = clay.PaddingAll(8), layoutDirection = .TopToBottom},
 	}
 }
