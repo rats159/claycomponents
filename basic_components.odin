@@ -50,11 +50,15 @@ radio_button :: proc(group: ^Radio_Group, index: u8) -> bool {
 		}
 
 		if clay.Hovered() && component_context.mouse_pressed {
+			if group.selected != index {
+				group.selected = index
+				return true
+			}
 			group.selected = index
 		}
 	}
 
-	return group.selected == index
+	return false
 }
 
 label :: proc($text: string, loc := #caller_location) {
