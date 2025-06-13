@@ -25,8 +25,8 @@ main :: proc() {
 	append(&raylib_fonts, rl.LoadFontEx("./resources/NotoSans-Regular.ttf", 24, nil, 0))
 	append(&raylib_fonts, rl.LoadFontEx("./resources/NotoSans-Bold.ttf", 48, nil, 0))
 
-	cc.set_font(&cc.default_text_styles, {fontId = 0, fontSize = 24, textColor = {0, 0, 0, 255}})
-	cc.set_font(&cc.default_header_styles, {fontId = 1, fontSize = 48, textColor = {0, 0, 0, 255}})
+	cc.set_font(&cc.default_text, 0)
+	cc.set_font(&cc.header_text, 1)
 
 	for !rl.WindowShouldClose() {
 		commands := layout()
@@ -60,7 +60,7 @@ layout :: proc() -> clay.ClayArray(clay.RenderCommand) {
 		if cc.section("Sliders!") {
 			if clay.UI()({layout = {layoutDirection = .TopToBottom}}) {
 				cc.horizontal_spacer(400)
-				cc.slider(&slider_val, 0, 10)
+				cc.slider(&slider_val, 0, 360)
 				cc.label_dynamic(fmt.tprintf("%f", slider_val))
 			}
 		}
@@ -100,62 +100,37 @@ set_theme :: proc(index: u8) {
 	switch index {
 	case 0:
 		cc.current_theme = cc.default_theme
-		cc.set_font(
-			&cc.default_text_styles,
-			{fontId = 0, fontSize = 24, textColor = {0, 0, 0, 255}},
-		)
-		cc.set_font(
-			&cc.default_header_styles,
-			{fontId = 1, fontSize = 48, textColor = {0, 0, 0, 255}},
-		)
 	case 1:
 		cc.current_theme.active_color = {191, 191, 191, 255}
 		cc.current_theme.base_color = {31, 31, 31, 255}
 		cc.current_theme.border_color = {127, 127, 127, 255}
 		cc.current_theme.hover_color = {63, 63, 63, 255}
-		cc.set_font(
-			&cc.default_text_styles,
-			{fontId = 0, fontSize = 24, textColor = {255, 255, 255, 255}},
-		)
-		cc.set_font(
-			&cc.default_header_styles,
-			{fontId = 1, fontSize = 48, textColor = {255, 255, 255, 255}},
-		)
+		cc.current_theme.font_color = {192, 192, 192, 255}
 	case 2:
 		cc.current_theme.active_color = {239, 189, 189, 255}
 		cc.current_theme.base_color = {160, 62, 62, 255}
 		cc.current_theme.border_color = {73, 36, 36, 255}
 		cc.current_theme.hover_color = {158, 61, 61, 255}
-		cc.set_font(
-			&cc.default_text_styles,
-			{fontId = 0, fontSize = 24, textColor = {249, 164, 164, 255}},
-		)
-		cc.set_font(
-			&cc.default_header_styles,
-			{fontId = 1, fontSize = 48, textColor = {249, 164, 164, 255}},
-		)
+		cc.current_theme.font_color = {249, 164, 164, 255}
 	case 3:
 		cc.current_theme.active_color = {226, 189, 239, 255}
 		cc.current_theme.base_color = {112, 10, 81, 255}
 		cc.current_theme.border_color = {40, 1, 29, 255}
 		cc.current_theme.hover_color = {167, 53, 173, 255}
-		cc.set_font(
-			&cc.default_text_styles,
-			{fontId = 0, fontSize = 24, textColor = {246, 179, 249, 255}},
-		)
-		cc.set_font(
-			&cc.default_header_styles,
-			{fontId = 1, fontSize = 48, textColor = {246, 179, 249, 255}},
-		)
+		cc.current_theme.font_color = {246, 179, 249, 255}
 	}
 }
 
 theme_button :: proc(group: ^cc.Radio_Group, index: u8, label: string) {
 	if clay.UI()({}) {
-		if cc.radio_button(group, index) {
-			set_theme(index)
-		}
+		current_theme := cc.current_theme
+		set_theme(index)
+		switched := cc.radio_button(group, index)
 		cc.label_dynamic(label)
+
+		if !switched {
+			cc.current_theme = current_theme
+		}
 	}
 }
 

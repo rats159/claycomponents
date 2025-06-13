@@ -3,17 +3,23 @@ package clay_components
 import clay "../clay-odin"
 
 Style_Set :: struct {
-	border_color: clay.Color,
-	hover_color:  clay.Color,
-	active_color: clay.Color,
-	base_color:   clay.Color,
+	border_color:      clay.Color,
+	hover_color:       clay.Color,
+	active_color:      clay.Color,
+	base_color:        clay.Color,
+	font_color:        clay.Color,
+	regular_text_size: u16,
+	header_text_size:  u16,
 }
 
 default_theme :: Style_Set {
-	border_color = {0, 0, 0, 255},
-	hover_color  = {191, 191, 191, 255},
-	active_color = {127, 127, 127, 255},
-	base_color   = {255, 255, 255, 255},
+	border_color      = {0, 0, 0, 255},
+	hover_color       = {191, 191, 191, 255},
+	active_color      = {127, 127, 127, 255},
+	base_color        = {255, 255, 255, 255},
+	font_color        = {0, 0, 0, 255},
+	regular_text_size = 24,
+	header_text_size  = 48,
 }
 
 current_theme := default_theme
@@ -158,6 +164,5 @@ vertical :: proc() -> clay.ElementDeclaration {
 	return {layout = {layoutDirection = .TopToBottom}}
 }
 
-default_text_styles: Font
-
-default_header_styles: Font
+default_text: Font
+header_text: Font

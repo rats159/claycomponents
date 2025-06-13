@@ -62,31 +62,67 @@ radio_button :: proc(group: ^Radio_Group, index: u8) -> bool {
 }
 
 label :: proc($text: string, loc := #caller_location) {
-	if !default_text_styles.initialized {
+	if !default_text.initialized {
 		panic("Default font not initialized!", loc)
 	}
-	clay.Text(text, &default_text_styles.clay_font)
+	clay.Text(
+		text,
+		clay.TextConfig(
+			{
+				fontId = default_text.id,
+				textColor = current_theme.font_color,
+				fontSize = current_theme.regular_text_size,
+			},
+		),
+	)
 }
 
 label_dynamic :: proc(text: string, loc := #caller_location) {
-	if !default_text_styles.initialized {
+	if !default_text.initialized {
 		panic("Default font not initialized!", loc)
 	}
-	clay.TextDynamic(text, &default_text_styles.clay_font)
+	clay.TextDynamic(
+		text,
+		clay.TextConfig(
+			{
+				fontId = default_text.id,
+				textColor = current_theme.font_color,
+				fontSize = current_theme.regular_text_size,
+			},
+		),
+	)
 }
 
 header :: proc($text: string) {
-	if !default_header_styles.initialized {
+	if !header_text.initialized {
 		panic("Header font not initialized!", loc)
 	}
-	clay.Text(text, &default_header_styles.clay_font)
+	clay.Text(
+		text,
+		clay.TextConfig(
+			{
+				fontId = header_text.id,
+				textColor = current_theme.font_color,
+				fontSize = current_theme.header_text_size,
+			},
+		),
+	)
 }
 
 header_dynamic :: proc(text: string, loc := #caller_location) {
-	if !default_header_styles.initialized {
+	if !header_text.initialized {
 		panic("Header font not initialized!", loc)
 	}
-	clay.TextDynamic(text, &default_header_styles.clay_font)
+	clay.TextDynamic(
+		text,
+		clay.TextConfig(
+			{
+				fontId = header_text.id,
+				textColor = current_theme.font_color,
+				fontSize = current_theme.header_text_size,
+			},
+		),
+	)
 }
 
 togglebox :: proc(active: ^bool) -> bool {

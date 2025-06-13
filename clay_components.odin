@@ -10,13 +10,13 @@ Component_Context :: struct {
 }
 
 Font :: struct {
-    clay_font: clay.TextElementConfig,
-    initialized: bool
+	id:          u16,
+	initialized: bool,
 }
 
 Radio_Group :: struct {
 	selected: u8,
-} 
+}
 
 component_context := Component_Context{}
 
@@ -29,7 +29,7 @@ set_state :: proc(pointer_down: bool, pointer_pos: [2]f32) {
 	component_context.mouse_down = pointer_down
 }
 
-set_font :: proc(font: ^Font, data: clay.TextElementConfig) { 
-    font.initialized = true
-    font.clay_font = data
+set_font :: proc(font: ^Font, id: u16) {
+	font.initialized = true
+	font.id = id
 }
