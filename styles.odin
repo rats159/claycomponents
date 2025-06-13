@@ -12,7 +12,7 @@ Style_Set :: struct {
 	header_text_size:  u16,
 }
 
-default_theme :: Style_Set {
+default_theme := Style_Set {
 	border_color      = {0, 0, 0, 255},
 	hover_color       = {191, 191, 191, 255},
 	active_color      = {127, 127, 127, 255},
@@ -22,7 +22,7 @@ default_theme :: Style_Set {
 	header_text_size  = 48,
 }
 
-current_theme := default_theme
+current_theme := &default_theme
 
 
 button_background_color :: proc() -> clay.Color {

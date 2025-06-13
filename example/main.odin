@@ -35,6 +35,36 @@ main :: proc() {
 	}
 }
 
+DARK := cc.Style_Set {
+	active_color      = {191, 191, 191, 255},
+	base_color        = {31, 31, 31, 255},
+	border_color      = {127, 127, 127, 255},
+	hover_color       = {63, 63, 63, 255},
+	font_color        = {192, 192, 192, 255},
+	header_text_size  = 48,
+	regular_text_size = 24,
+}
+
+RED := cc.Style_Set {
+	active_color      = {239, 189, 189, 255},
+	base_color        = {160, 62, 62, 255},
+	border_color      = {73, 36, 36, 255},
+	hover_color       = {183, 100, 100, 255},
+	font_color        = {249, 164, 164, 255},
+	header_text_size  = 48,
+	regular_text_size = 24,
+}
+
+PINKYPURPLEY := cc.Style_Set {
+	active_color      = {226, 189, 239, 255},
+	base_color        = {112, 10, 81, 255},
+	border_color      = {40, 1, 29, 255},
+	hover_color       = {167, 53, 173, 255},
+	font_color        = {246, 179, 249, 255},
+	header_text_size  = 48,
+	regular_text_size = 24,
+}
+
 slider_val: f32 = 0
 radio_group := cc.Radio_Group{}
 togglebox_toggled := false
@@ -60,7 +90,7 @@ layout :: proc() -> clay.ClayArray(clay.RenderCommand) {
 		if cc.section("Sliders!") {
 			if clay.UI()({layout = {layoutDirection = .TopToBottom}}) {
 				cc.horizontal_spacer(400)
-				cc.slider(&slider_val, 0, 360)
+				cc.slider(&slider_val, 0, 1)
 				cc.label_dynamic(fmt.tprintf("%f", slider_val))
 			}
 		}
@@ -90,6 +120,21 @@ layout :: proc() -> clay.ClayArray(clay.RenderCommand) {
 			}
 		}
 
+		if cc.section("Theme Overrides") {
+			if clay.UI()({layout = {childGap = 8}}) {
+				current_theme := cc.current_theme
+				set_theme(0)
+				cc.button("Always light!")
+				set_theme(1)
+				cc.button("Always dark!")
+				set_theme(2)
+				cc.button("Always red!")
+				set_theme(3)
+				cc.button("Always pink!")
+				cc.current_theme = current_theme
+			}
+		}
+
 	}
 
 
@@ -99,25 +144,13 @@ layout :: proc() -> clay.ClayArray(clay.RenderCommand) {
 set_theme :: proc(index: u8) {
 	switch index {
 	case 0:
-		cc.current_theme = cc.default_theme
+		cc.current_theme = &cc.default_theme
 	case 1:
-		cc.current_theme.active_color = {191, 191, 191, 255}
-		cc.current_theme.base_color = {31, 31, 31, 255}
-		cc.current_theme.border_color = {127, 127, 127, 255}
-		cc.current_theme.hover_color = {63, 63, 63, 255}
-		cc.current_theme.font_color = {192, 192, 192, 255}
+		cc.current_theme = &DARK
 	case 2:
-		cc.current_theme.active_color = {239, 189, 189, 255}
-		cc.current_theme.base_color = {160, 62, 62, 255}
-		cc.current_theme.border_color = {73, 36, 36, 255}
-		cc.current_theme.hover_color = {158, 61, 61, 255}
-		cc.current_theme.font_color = {249, 164, 164, 255}
+		cc.current_theme = &RED
 	case 3:
-		cc.current_theme.active_color = {226, 189, 239, 255}
-		cc.current_theme.base_color = {112, 10, 81, 255}
-		cc.current_theme.border_color = {40, 1, 29, 255}
-		cc.current_theme.hover_color = {167, 53, 173, 255}
-		cc.current_theme.font_color = {246, 179, 249, 255}
+		cc.current_theme = &PINKYPURPLEY
 	}
 }
 
