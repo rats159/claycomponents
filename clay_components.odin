@@ -1,6 +1,5 @@
 package clay_components
 
-import clay "../clay-odin"
 
 Component_Context :: struct {
 	mouse_down:     bool, // Left mouse button is held down

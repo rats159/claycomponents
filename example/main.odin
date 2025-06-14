@@ -4,7 +4,6 @@ import cc ".."
 import clay "../../clay-odin"
 import "base:runtime"
 import "core:fmt"
-import "core:strconv"
 import rl "vendor:raylib"
 
 err_handler :: proc "c" (data: clay.ErrorData) {

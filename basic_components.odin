@@ -1,8 +1,6 @@
 package clay_components
 
 import clay "../clay-odin"
-import "core:fmt"
-import "core:math"
 // All components inside this file require no custom render commands
 
 slider :: proc(value: ^$T, min: T, max: T) {
